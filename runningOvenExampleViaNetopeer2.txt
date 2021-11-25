@@ -1,0 +1,54 @@
+#Open 3 cmd prmopts
+
+-------------------------------CMD 1-----------------------------------------
+#start sysrepoplugind in debug mode
+$ sysrepo-plugind -d -v4
+
+#Use window to view debug status
+-------------------------------CMD 2-----------------------------------------
+#Start netopeer2-server
+$ netopeer2-server
+-------------------------------CMD 3-----------------------------------------
+#Open netopeer2-cli cmd prompt
+$ netopeer2-cli
+
+#Connect to server
+$ connect --ssh --host localhost --port 830
+
+#First password: None
+#Second password for root@locahost: netconf
+#Documentation: https://manpages.ubuntu.com/manpages/impish/man1/netopeer2-cli.1.html
+
+#Check connection using:
+$ status
+
+#Check avaliable subscription streams using
+$ get --filter-xpath /netconf/streams
+
+#Subscribe to oven or NETCONF stream
+$ subscribe -t oven
+$ subscribe -t NETCONF
+
+#Submit rpc using:
+$ user-rpc
+
+## RPC ##
+<insert-food xmlns="urn:sysrepo:oven">
+    <time>on-oven-ready</time>
+</insert-food>
+
+#Use edit-config to change datastore
+$ edit-config --target running --config
+
+## DATASTORE CONFIG ##
+<oven xmlns="urn:sysrepo:oven">
+    <turned-on>true</turned-on>
+    <temperature>200</temperature>
+</oven>
+
+#Remove food
+$ user-rpc
+
+## RPC ##
+<remove-food xmlns="urn:sysrepo:oven"/>
+
