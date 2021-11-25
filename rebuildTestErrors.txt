@@ -1,0 +1,32 @@
+#Testing for segmentation fault when rebuilding twice
+#ENSURE INSIDE THE SYSREPO DIRECTORY
+
+#Uninstall oven from sysrepo
+$ sysrepoctl -u oven
+
+#Remove build file
+$ rm -rf build
+
+#create new build file and move into it
+$ mkdir build && cd build
+$ cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr ..
+$ make && make install
+
+#check sysrepoctl -l works
+$ sysrepoctl -l
+
+#Navigate to sysrepo directory
+$ cd /root/sysrepo
+
+#Repeat steps above
+$ rm -rf build
+$ mkdir build && cd build
+$ cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr ..
+$ make && make install
+
+RESULT:
+ERROR NOT FIXED 
+sysrepoctl: /root/sysrepo/src/plugins/ds_lyb.c:140: srpds_lyb_init: Assertion `!srlyb_file_exists(srpds_name, path)' failed.
+Aborted
+
+Not critial to fix but kinda annoying.
