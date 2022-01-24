@@ -58,4 +58,4 @@ WORKDIR /
 ADD start_netconf.sh /
 ADD test.py /
 
-CMD ["/bin/bash", "./start_netconf.sh"]
+#CMD ["/bin/bash", "./start_netconf.sh"]

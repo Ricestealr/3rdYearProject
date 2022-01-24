@@ -67,7 +67,7 @@ RUN make -j 4 install
 
 
 WORKDIR /netconf/buildroot-hicn
-RUN cmake -DSRPD_PLUGINS_PATH=/usr/lib/x86_64-linux-gnu \
+RUN cmake -DSRPD_PLUGINS_PATH=/usr/local/lib/sysrepo-plugind/plugins \
 	  -DVPP_HOME=/netconf/vpp/build-root/install-vpp_debug-native/vpp \
           ../hicn/ctrl/sysrepo-plugins
 RUN make -j 4 install
@@ -91,4 +91,4 @@ WORKDIR /
 ADD start_netconf.sh /
 ADD test.py /
 
-CMD ["/bin/bash", "./start_netconf.sh"]
+#CMD ["/bin/bash", "./start_netconf.sh"]
