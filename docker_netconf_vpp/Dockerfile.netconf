@@ -86,9 +86,17 @@ RUN make -j 4 install
 
 RUN useradd -m -s /bin/bash netconf && echo "netconf:netconf" | chpasswd
 
+WORKDIR /usr/local/lib
+RUN mkdir sysrepo-plugind
+WORKDIR /usr/local/lib/sysrepo-plugind
+RUN mkdir plugins
+
 WORKDIR /
+
+RUN cp /netconf/buildroot-sysrepo/examples/oven.so /usr/local/lib/sysrepo-plugind/plugins
 
 ADD start_netconf.sh /
 ADD test.py /
+
 
 #CMD ["/bin/bash", "./start_netconf.sh"]

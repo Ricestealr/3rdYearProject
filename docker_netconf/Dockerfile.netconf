@@ -5,7 +5,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/London
 
 RUN apt-get update
-RUN apt-get install -y git build-essential \
+RUN apt-get install -y git build-essential vim \
 		       cmake python3 python3-pip cargo \
 		       zlib1g-dev libssl-dev libpcre2-dev \
                     --no-install-recommends \
@@ -53,9 +53,18 @@ RUN make -j 4 install
 
 RUN useradd -m -s /bin/bash netconf && echo "netconf:netconf" | chpasswd
 
+WORKDIR /usr/local/lib
+RUN mkdir sysrepo-plugind
+WORKDIR /usr/local/lib/sysrepo-plugind
+RUN mkdir plugins
+
 WORKDIR /
+
+RUN cp /netconf/buildroot-sysrepo/examples/oven.so /usr/local/lib/sysrepo-plugind/plugins
 
 ADD start_netconf.sh /
 ADD test.py /
+ADD allSubscribe.py /
+ADD testOven.py /
 
 #CMD ["/bin/bash", "./start_netconf.sh"]
