@@ -86,10 +86,10 @@ RUN make -j 4 install
 
 RUN useradd -m -s /bin/bash netconf && echo "netconf:netconf" | chpasswd
 
-WORKDIR /usr/local/lib
-RUN mkdir sysrepo-plugind
-WORKDIR /usr/local/lib/sysrepo-plugind
-RUN mkdir plugins
+#WORKDIR /usr/local/lib
+#RUN mkdir sysrepo-plugind
+#WORKDIR /usr/local/lib/sysrepo-plugind
+#RUN mkdir plugins
 
 WORKDIR /
 
@@ -98,5 +98,6 @@ RUN cp /netconf/buildroot-sysrepo/examples/oven.so /usr/local/lib/sysrepo-plugin
 ADD start_netconf.sh /
 ADD test.py /
 
+ENV PATH="/netconf/vpp/build-root/install-vpp_debug-native/vpp/bin:${PATH}"
 
 #CMD ["/bin/bash", "./start_netconf.sh"]
