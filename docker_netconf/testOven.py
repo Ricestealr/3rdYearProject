@@ -17,4 +17,8 @@ with manager.connect(host='localhost', port=830, username='netconf',password='ne
         </config>
     '''    
     m.edit_config(config = oven_config, target='running', default_operation='merge')
-
+    time.sleep(10)
+    food_out_rpc = '''<remove-food xmlns="urn:sysrepo:oven"/>'''
+    result = m.dispatch(to_ele(food_out_rpc))
+    time.sleep(3)
+    print('Oven Script Execution Successful')
