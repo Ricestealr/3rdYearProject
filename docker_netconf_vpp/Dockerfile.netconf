@@ -93,11 +93,36 @@ RUN useradd -m -s /bin/bash netconf && echo "netconf:netconf" | chpasswd
 
 WORKDIR /
 
+# Setting up environment for VPP
+
+ADD dependencies/libmbedcrypto1_2.8.0-1_amd64.deb /var/cache/apt/archives
+ADD dependencies/libmbedtls10_2.8.0-1_amd64.deb /var/cache/apt/archives
+ADD dependencies/libmnl0_1.0.4-2_amd64.deb /var/cache/apt/archives
+ADD dependencies/iproute2_4.15.0-2ubuntu1.1_amd64.deb /var/cache/apt/archives
+RUN sudo dpkg -i /var/cache/apt/archives/libmbedcrypto1_2.8.0-1_amd64.deb
+RUN sudo dpkg -i /var/cache/apt/archives/libmbedtls10_2.8.0-1_amd64.deb
+RUN sudo dpkg -i /var/cache/apt/archives/libmnl0_1.0.4-2_amd64.deb
+RUN sudo dpkg -i /var/cache/apt/archives/iproute2_4.15.0-2ubuntu1.1_amd64.deb
+RUN apt-get install -y nano gnupg
+
+RUN echo "deb [trusted=yes] https://packagecloud.io/fdio/release/ubuntu bionic main" > /etc/apt/sources.list.d/99fd.io.list
+RUN curl -L https://packagecloud.io/fdio/release/gpgkey | sudo apt-key add -
+RUN apt-get update
+RUN apt-get install -y vpp vpp-plugin-core vpp-plugin-dpdk iputils-ping
+
+# Creating veth interface in host (IP: 10.10.1.1./24)
+RUN sudo ip link add name vpp1out type veth peer name vpp1host
+RUN sudo ip link set dev vpp1out up
+RUN sudo ip link set dev vpp1host up
+RUN sudo ip addr add 10.10.1.1/24 dev vpp1host
+
 RUN cp /netconf/buildroot-sysrepo/examples/oven.so /usr/local/lib/sysrepo-plugind/plugins
 
 ADD start_netconf.sh /
 ADD test.py /
+ADD startup1.conf /
+ADD startup2.conf /
 
 ENV PATH="/netconf/vpp/build-root/install-vpp_debug-native/vpp/bin:${PATH}"
 
-#CMD ["/bin/bash", "./start_netconf.sh"]
+# CMD ["/bin/bash", "./start_netconf.sh"]
