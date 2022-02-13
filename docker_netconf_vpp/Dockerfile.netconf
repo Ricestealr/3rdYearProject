@@ -95,22 +95,22 @@ WORKDIR /
 
 # Setting up environment for VPP
 
-#ADD dependencies/libmbedcrypto1_2.8.0-1_amd64.deb /var/cache/apt/archives
-#ADD dependencies/libmbedtls10_2.8.0-1_amd64.deb /var/cache/apt/archives
-#ADD dependencies/libmnl0_1.0.4-2_amd64.deb /var/cache/apt/archives
-#ADD dependencies/iproute2_4.15.0-2ubuntu1.1_amd64.deb /var/cache/apt/archives
-#RUN sudo dpkg -i /var/cache/apt/archives/libmbedcrypto1_2.8.0-1_amd64.deb
-#RUN sudo dpkg -i /var/cache/apt/archives/libmbedtls10_2.8.0-1_amd64.deb
-#RUN sudo dpkg -i /var/cache/apt/archives/libmnl0_1.0.4-2_amd64.deb
-#RUN sudo dpkg -i /var/cache/apt/archives/iproute2_4.15.0-2ubuntu1.1_amd64.deb
-#RUN apt-get install -y nano gnupg
+# ADD dependencies/libmbedcrypto1_2.8.0-1_amd64.deb /var/cache/apt/archives
+# ADD dependencies/libmbedtls10_2.8.0-1_amd64.deb /var/cache/apt/archives
+# ADD dependencies/libmnl0_1.0.4-2_amd64.deb /var/cache/apt/archives
+# ADD dependencies/iproute2_4.15.0-2ubuntu1.1_amd64.deb /var/cache/apt/archives
+# RUN sudo dpkg -i /var/cache/apt/archives/libmbedcrypto1_2.8.0-1_amd64.deb
+# RUN sudo dpkg -i /var/cache/apt/archives/libmbedtls10_2.8.0-1_amd64.deb
+# RUN sudo dpkg -i /var/cache/apt/archives/libmnl0_1.0.4-2_amd64.deb
+# RUN sudo dpkg -i /var/cache/apt/archives/iproute2_4.15.0-2ubuntu1.1_amd64.deb
+# RUN apt-get install -y nano gnupg
 
-#RUN echo "deb [trusted=yes] https://packagecloud.io/fdio/2101/ubuntu bionic main" > /etc/apt/sources.list.d/99fd.io.list
-#RUN curl -L https://packagecloud.io/fdio/2101/gpgkey | sudo apt-key add -
-#RUN apt-get update
-#RUN apt-get install -y vpp vpp-plugin-core vpp-plugin-dpdk iputils-ping
+# RUN echo "deb [trusted=yes] https://packagecloud.io/fdio/2101/ubuntu bionic main" > /etc/apt/sources.list.d/99fd.io.list
+# RUN curl -L https://packagecloud.io/fdio/2101/gpgkey | sudo apt-key add -
+# RUN apt-get update
+# RUN apt-get install -y vpp vpp-plugin-core vpp-plugin-dpdk iputils-ping
 
-RUN apt-get install -y iputils-ping
+# RUN apt-get install -y iputils-ping
 
 
 # Creating veth interface in host (IP: 10.10.1.1./24)
@@ -124,14 +124,20 @@ RUN apt-get install -y iputils-ping
 #RUN curl -s https://packagecloud.io/install/repositories/fdio/release/script.deb.sh | bash
 #RUN apt-get update && apt-get install -y hicn-plugin
 
-RUN sysrepoctl -i /netconf/hicn/ctrl/sysrepo-plugins/yang/hicn/hicn.yang
-RUN cp /netconf/buildroot-sysrepo/examples/oven.so /usr/local/lib/sysrepo-plugind/plugins
-RUN cp /netconf/buildroot-hicn/build-root/lib/libsysrepohicn.so /usr/local/lib/sysrepo-plugind/plugins
+# Run manually otherwise sysrepoctl breaks
+#RUN sysrepoctl -i /netconf/hicn/ctrl/sysrepo-plugins/yang/hicn/hicn.yang
+#RUN sysrepoctl -i /netconf/sysrepo/examples/plugin/oven.yang
+#RUN cp /netconf/buildroot-sysrepo/examples/oven.so /usr/local/lib/sysrepo-plugind/plugins
+#RUN cp /netconf/buildroot-hicn/build-root/lib/libsysrepohicn.so /usr/local/lib/sysrepo-plugind/plugins
+
 
 ADD start_netconf.sh /
 ADD test.py /
 ADD startup1.conf /
 ADD startup2.conf /
+ADD allSubscribe.py /
+ADD testHICN.py /
+ADD testOven.py /
 
 ENV PATH="/netconf/vpp/build-root/install-vpp_debug-native/vpp/bin:${PATH}"
 
