@@ -1,0 +1,109 @@
+FROM ubuntu:20.04
+MAINTAINER s.rene@ucl.ac.uk
+
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/London
+
+RUN apt-get update
+RUN apt-get install -y git build-essential sudo gcc-7 \
+		       cmake python3 python3-pip cargo \
+		       zlib1g-dev libssl-dev libpcre2-dev \
+                    --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get autoremove -y \
+    && apt-get clean
+
+RUN pip3 install ncclient
+
+WORKDIR /netconf
+RUN git clone -b v2.0.112 https://github.com/CESNET/libyang.git
+RUN git clone -b v2.0.53 https://github.com/sysrepo/sysrepo.git
+RUN git clone -b v2.0.24 https://github.com/CESNET/libnetconf2.git 
+RUN git clone -b v2.0.35 https://github.com/CESNET/netopeer2.git
+RUN git clone -b libssh-0.9.6 http://git.libssh.org/projects/libssh.git
+
+RUN git clone -b v21.01 https://github.com/srene/vpp
+RUN git clone https://github.com/srene/hicn
+
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 10
+
+WORKDIR /netconf/vpp
+
+RUN yes | make install-deps
+
+RUN make build
+
+WORKDIR /netconf/hicn
+
+WORKDIR /netconf/hicn-build
+
+RUN cmake ../hicn/hicn-plugin -DVPP_HOME=/netconf/vpp/build-root/install-vpp_debug-native/vpp -DCMAKE_INSTALL_PREFIX=/netconf/vpp/build-root/install-vpp_debug-native/vpp
+
+RUN make install
+
+WORKDIR /netconf/hicn-lib
+
+RUN cmake ../hicn/lib
+
+RUN make install
+
+RUN mkdir buildroot-libyang
+RUN mkdir buildroot-sysrepo
+RUN mkdir buildroot-libnetconf2
+RUN mkdir buildroot-netopeer2
+RUN mkdir buildroot-libssh
+RUN mkdir buildroot-hicn
+
+ENV LD_LIBRARY_PATH="/usr/local/lib:${LD_LIBRARY_PATH}"
+ENV PATH="/usr/local/bin:${PATH}"
+
+WORKDIR /netconf/buildroot-libyang
+RUN cmake ../libyang
+RUN make -j 4 install 
+
+WORKDIR /netconf/buildroot-sysrepo
+RUN cmake ../sysrepo
+RUN make -j 4 install
+
+
+WORKDIR /netconf/buildroot-hicn
+RUN cmake -DSRPD_PLUGINS_PATH=/usr/local/lib/sysrepo-plugind/plugins \
+	  -DVPP_HOME=/netconf/vpp/build-root/install-vpp_debug-native/vpp \
+          ../hicn/ctrl/sysrepo-plugins
+RUN make -j 4 install
+
+WORKDIR /netconf/buildroot-libssh
+RUN cmake ../libssh
+RUN make -j 4 install
+
+WORKDIR /netconf/buildroot-libnetconf2
+RUN cmake ../libnetconf2
+RUN make -j 4 install 
+
+WORKDIR /netconf/buildroot-netopeer2
+RUN cmake -DINSTALL_MODULES=ON -DGENERATE_HOSTKEY=ON -MERGE_LISTEN_CONFIG=ON ../netopeer2 
+RUN make -j 4 install
+
+RUN useradd -m -s /bin/bash netconf && echo "netconf:netconf" | chpasswd
+
+#WORKDIR /usr/local/lib
+#RUN mkdir sysrepo-plugind
+#WORKDIR /usr/local/lib/sysrepo-plugind
+#RUN mkdir plugins
+
+WORKDIR /
+
+#RUN cp /netconf/buildroot-sysrepo/examples/oven.so /usr/local/lib/sysrepo-plugind/plugins
+
+ADD startup1.conf /
+ADD start_netconf.sh /
+#ADD test.py /
+
+#RUN sysrepoctl -i /netconf/sysrepo/examples/plugin/oven.yang
+#RUN sysrepoctl -i /netconf/hicn/ctrl/sysrepo-plugins/yang/hicn/hicn.yang
+
+ENV PATH="/netconf/vpp/build-root/install-vpp_debug-native/vpp/bin:${PATH}"
+
+RUN chmod +x /start_netconf.sh
+ENTRYPOINT ["/start_netconf.sh"]
+#CMD ["/bin/bash","/start_netconf.sh"]
