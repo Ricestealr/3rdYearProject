@@ -97,6 +97,8 @@ WORKDIR /
 
 ADD startup1.conf /
 ADD start_netconf.sh /
+ADD allSubscribe.py /
+ADD testHICN.py /
 #ADD test.py /
 
 #RUN sysrepoctl -i /netconf/sysrepo/examples/plugin/oven.yang
@@ -104,6 +106,6 @@ ADD start_netconf.sh /
 
 ENV PATH="/netconf/vpp/build-root/install-vpp_debug-native/vpp/bin:${PATH}"
 
-RUN chmod +x /start_netconf.sh
-ENTRYPOINT ["/start_netconf.sh"]
+#RUN chmod +x /start_netconf.sh
+#ENTRYPOINT ["/start_netconf.sh"]
 #CMD ["/bin/bash","/start_netconf.sh"]
