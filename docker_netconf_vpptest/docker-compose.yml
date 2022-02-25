@@ -1,0 +1,32 @@
+version: '3.7'
+
+networks:
+  vppnet1:
+    name: vppnet1
+  vppnet2:
+    name: vppnet2
+  global:
+
+services:
+  vpp1-service:
+    image: netconf_vpp
+    hostname: vpp1
+    container_name: vpp1
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    networks:
+      - vppnet1
+      - global
+
+  vpp2-service:
+    image: netconf_vpp
+    hostname: vpp2
+    container_name: vpp2
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    #    environment:
+    #      PAIR_SERVER: sydney-service:8080 # doesn't work
+    networks:
+      - vppnet2
+      - global
+

@@ -5,7 +5,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/London
 
 RUN apt-get update
-RUN apt-get install -y git build-essential sudo gcc-7 \
+RUN apt-get install -y wget git build-essential sudo gcc-7 \
 		       cmake python3 python3-pip cargo \
 		       zlib1g-dev libssl-dev libpcre2-dev \
                     --no-install-recommends \
@@ -14,6 +14,12 @@ RUN apt-get install -y git build-essential sudo gcc-7 \
     && apt-get clean
 
 RUN pip3 install ncclient
+
+RUN wget https://go.dev/dl/go1.17.7.linux-amd64.tar.gz
+
+RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.17.7.linux-amd64.tar.gz
+
+ENV PATH=$PATH:/usr/local/go/bin
 
 WORKDIR /netconf
 RUN git clone -b v2.0.112 https://github.com/CESNET/libyang.git
@@ -25,13 +31,40 @@ RUN git clone -b libssh-0.9.6 http://git.libssh.org/projects/libssh.git
 RUN git clone -b v21.01 https://github.com/srene/vpp
 RUN git clone https://github.com/srene/hicn
 
+RUN git clone https://github.com/srene/vpp-controller.git
+
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 10
+
+ENV GO111MODULE=off
+
+RUN go get git.fd.io/govpp.git 
+RUN go get git.fd.io/govpp.git/api 
+RUN go get git.fd.io/govpp.git/binapi/ip 
+RUN go get git.fd.io/govpp.git/binapi/ip_types 
+RUN go get git.fd.io/govpp.git/binapi/sr
+
+ENV GO111MODULE=on
+ 
+RUN go install git.fd.io/govpp.git/cmd/binapi-generator@master
 
 WORKDIR /netconf/vpp
 
 RUN yes | make install-deps
 
 RUN make build
+
+WORKDIR /root/go/src/git.fd.io/govpp.git/
+
+RUN /root/go/bin/binapi-generator --input-dir=/netconf/vpp/build-root/install-vpp_debug-native/vpp/share/vpp/api/core --output-dir=binapi
+
+WORKDIR /netconf/vpp-controller/libvpp
+
+ENV GO111MODULE=off
+
+RUN go build -o vpp.so -buildmode=c-shared vpp.go
+
+RUN cp vpp.so /usr/local/lib/libvpp.so
+
 
 WORKDIR /netconf/hicn
 
@@ -95,8 +128,11 @@ WORKDIR /
 
 #RUN cp /netconf/buildroot-sysrepo/examples/oven.so /usr/local/lib/sysrepo-plugind/plugins
 
-ADD startup1.conf /
+ADD configs/startup_nohicn.conf /
+ADD configs/startup_hicn.conf /
 ADD start_netconf.sh /
+ADD start_netconf_hicn.sh /
+#ADD *.py /
 #ADD test.py /
 
 #RUN sysrepoctl -i /netconf/sysrepo/examples/plugin/oven.yang
@@ -105,5 +141,5 @@ ADD start_netconf.sh /
 ENV PATH="/netconf/vpp/build-root/install-vpp_debug-native/vpp/bin:${PATH}"
 
 RUN chmod +x /start_netconf.sh
-ENTRYPOINT ["/start_netconf.sh"]
-#CMD ["/bin/bash","/start_netconf.sh"]
+#ENTRYPOINT ["/start_netconf.sh"]
+CMD ["/bin/bash"]
