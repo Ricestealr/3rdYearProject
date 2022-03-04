@@ -1,0 +1,104 @@
+version: '3.9'
+
+networks:
+  vppnet1:
+    name: vppnet1
+    external: true 
+  vppnet2:
+    name: vppnet2
+    external: true     
+  vppnet3:
+    name: vppnet3
+    external: true
+  vppnet4:
+    name: vppnet4
+    external: true 
+  vppnet5:
+    name: vppnet5
+    external: true 
+  vppnet6:
+    name: vppnet6
+    external: true     
+services:
+  vpp1-service:
+    image: netconf_vpp
+    hostname: vpp1
+    container_name: vpp1
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    privileged: true
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.eth0.proxy_ndp=1
+    networks:
+      - vppnet1
+  vpp2-service:
+    image: netconf_vpp
+    hostname: vpp2
+    container_name: vpp2
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    privileged: true  
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.eth0.proxy_ndp=1
+    networks:
+      - vppnet1
+      - vppnet2
+      - vppnet3
+
+  vpp3-service:
+    image: netconf_vpp
+    hostname: vpp3
+    container_name: vpp3
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    privileged: true
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.eth0.proxy_ndp=1
+    networks:
+      - vppnet2
+      - vppnet4
+
+  vpp4-service:
+    image: netconf_vpp
+    hostname: vpp4
+    container_name: vpp4
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    privileged: true
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.eth0.proxy_ndp=1    
+    networks:
+      - vppnet3
+      - vppnet5
+
+  vpp5-service:
+    image: netconf_vpp
+    hostname: vpp5
+    container_name: vpp5
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    privileged: true
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.eth0.proxy_ndp=1    
+    networks:
+      - vppnet4
+      - vppnet5
+      - vppnet6
+
+  vpp6-service:
+    image: netconf_vpp
+    hostname: vpp6
+    container_name: vpp6
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    privileged: true
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.eth0.proxy_ndp=1    
+    networks:
+      - vppnet6
