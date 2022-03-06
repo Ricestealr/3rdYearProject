@@ -138,6 +138,12 @@ ADD startup2.conf /
 ADD allSubscribe.py /
 ADD testHICN.py /
 ADD testOven.py /
+ADD ondemand.c /
+ADD ondemand.yang /
+ADD startup_hicn.conf /
+ADD testVPP.py /
+
+RUN gcc -shared -o ondemand.so -fPIC ondemand.c
 
 ENV PATH="/netconf/vpp/build-root/install-vpp_debug-native/vpp/bin:${PATH}"
 
