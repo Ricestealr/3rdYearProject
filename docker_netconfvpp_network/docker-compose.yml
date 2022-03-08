@@ -32,6 +32,8 @@ services:
       - net.ipv6.conf.eth0.proxy_ndp=1
     networks:
       - vppnet1
+    entrypoint: "sh /configs/start1.sh"
+
   vpp2-service:
     image: netconf_vpp
     hostname: vpp2
@@ -46,7 +48,8 @@ services:
       - vppnet1
       - vppnet2
       - vppnet3
-
+    entrypoint: "sh /configs/start2.sh"
+  
   vpp3-service:
     image: netconf_vpp
     hostname: vpp3
@@ -60,6 +63,7 @@ services:
     networks:
       - vppnet2
       - vppnet4
+    entrypoint: "sh /configs/start3.sh"
 
   vpp4-service:
     image: netconf_vpp
@@ -74,6 +78,7 @@ services:
     networks:
       - vppnet3
       - vppnet5
+    entrypoint: "sh /configs/start4.sh"
 
   vpp5-service:
     image: netconf_vpp
@@ -89,6 +94,7 @@ services:
       - vppnet4
       - vppnet5
       - vppnet6
+    entrypoint: "sh /configs/start5.sh"
 
   vpp6-service:
     image: netconf_vpp
@@ -102,3 +108,5 @@ services:
       - net.ipv6.conf.eth0.proxy_ndp=1    
     networks:
       - vppnet6
+    entrypoint: "sh /configs/start6.sh"
+
