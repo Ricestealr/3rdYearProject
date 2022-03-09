@@ -122,16 +122,9 @@ RUN useradd -m -s /bin/bash netconf && echo "netconf:netconf" | chpasswd
 
 WORKDIR /
 
-
-Add allSubscribe.py /
-ADD configs/startup_nohicn.conf /
-ADD configs/startup_hicn.conf /
-ADD start_netconf.sh /
-ADD start_netconf_hicn.sh /
-
 ENV PATH="/netconf/vpp/build-root/install-vpp_debug-native/vpp/bin:${PATH}"
 
-RUN chmod +x ./start_netconf_hicn.sh
-RUN chmod +x ./start_netconf.sh
+ADD configs2 /configs
+RUN chmod +x /configs/*
 #ENTRYPOINT ["/start_netconf.sh"]
 #CMD ["/bin/bash","/start_netconf.sh"]
