@@ -124,7 +124,7 @@ WORKDIR /
 
 ENV PATH="/netconf/vpp/build-root/install-vpp_debug-native/vpp/bin:${PATH}"
 
-ADD configs /configs
+ADD configs2 /configs
 RUN chmod +x /configs/*
 #ENTRYPOINT ["/start_netconf.sh"]
 #CMD ["/bin/bash","/start_netconf.sh"]

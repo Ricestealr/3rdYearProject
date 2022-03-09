@@ -9,13 +9,13 @@ until ls -l $CLISOCK2 ; do
        sleep 1
 done
 
-$VPPCTL -s $CLISOCK2 create memif socket id 0 filename /shared/vpp/memif0.sock
-$VPPCTL -s $CLISOCK2 create interface memif id 0 socket-id 0 slave
+$VPPCTL -s $CLISOCK2 create memif socket id 6 filename /shared/vpp/memif6.sock
+$VPPCTL -s $CLISOCK2 create interface memif id 0 socket-id 6 slave
 #$VPPCTL -s $CLISOCK2 create host-interface name eth0
 sleep 1
-$VPPCTL -s $CLISOCK2 set interface ip address memif0/0 2000::5/64
+$VPPCTL -s $CLISOCK2 set interface ip address memif6/0 2000::5/64
 sleep 1
-$VPPCTL -s $CLISOCK2 set int state memif0/0 up
+$VPPCTL -s $CLISOCK2 set int state memif6/0 up
 sleep 1
 $VPPCTL -s $CLISOCK2 create memif socket id 1 filename /shared/vpp/memif1.sock
 sleep 1
