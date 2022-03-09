@@ -18,7 +18,11 @@ networks:
     external: true 
   vppnet6:
     name: vppnet6
-    external: true     
+    external: true    
+
+volumes:
+  shared:
+ 
 services:
   vpp1-service:
     image: netconf_vpp
@@ -33,6 +37,8 @@ services:
     networks:
       - vppnet1
     entrypoint: "sh /configs/start1.sh"
+    volumes:
+      - shared:/shared
 
   vpp2-service:
     image: netconf_vpp
@@ -49,6 +55,8 @@ services:
       - vppnet2
       - vppnet3
     entrypoint: "sh /configs/start2.sh"
+    volumes:
+      - shared:/shared
   
   vpp3-service:
     image: netconf_vpp
@@ -64,6 +72,8 @@ services:
       - vppnet2
       - vppnet4
     entrypoint: "sh /configs/start3.sh"
+    volumes:
+      - shared:/shared
 
   vpp4-service:
     image: netconf_vpp
@@ -79,6 +89,8 @@ services:
       - vppnet3
       - vppnet5
     entrypoint: "sh /configs/start4.sh"
+    volumes:
+      - shared:/shared
 
   vpp5-service:
     image: netconf_vpp
@@ -95,6 +107,8 @@ services:
       - vppnet5
       - vppnet6
     entrypoint: "sh /configs/start5.sh"
+    volumes:
+      - shared:/shared
 
   vpp6-service:
     image: netconf_vpp
@@ -109,4 +123,5 @@ services:
     networks:
       - vppnet6
     entrypoint: "sh /configs/start6.sh"
-
+    volumes:
+      - shared:/shared
