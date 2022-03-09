@@ -38,5 +38,5 @@ sleep 1
 $VPPCTL -s $CLISOCK1 exec /configs/pg.conf
 sleep 1
 
-$VPPCTL -s $CLISOCK1 trace add memif-input 50
+$VPPCTL -s $CLISOCK1 trace add af-packet-input 50
 

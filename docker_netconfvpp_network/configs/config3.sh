@@ -28,5 +28,5 @@ $VPPCTL -s $CLISOCK3 ip route add 2000::/64 table 10 via 2001::4 host-eth0
 #sleep 1
 $VPPCTL -s $CLISOCK3 hicn enable 2::2/128
 #sleep 1
-$VPPCTL -s $CLISOCK3 trace add memif-input 50
+$VPPCTL -s $CLISOCK3 trace add af-packet-input 50
 

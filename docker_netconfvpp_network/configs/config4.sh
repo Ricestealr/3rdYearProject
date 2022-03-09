@@ -25,5 +25,5 @@ $VPPCTL -s $CLISOCK4 ip route add 3::3/128 via 2004::5 host-eth1
 
 $VPPCTL -s $CLISOCK4 hicn enable 3::3/128
 
-$VPPCTL -s $CLISOCK4 trace add memif-input 50
+$VPPCTL -s $CLISOCK4 trace add af-packet-input 50
 

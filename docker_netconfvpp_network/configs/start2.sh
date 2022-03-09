@@ -5,5 +5,6 @@
 sysrepoctl -i /netconf/hicn/ctrl/sysrepo-plugins/yang/ondemand.yang
 vpp -c /configs/startup_nohicn.conf
 netopeer2-server
-sysrepo-plugind
+#sysrepo-plugind
 /configs/config2.sh
+sysrepo-plugind -d -v 4

@@ -26,9 +26,9 @@ sleep 1
 $VPPCTL -s $CLISOCK5 set int state host-eth2 up
 
 sleep 1
-$VPPCTL -s $CLISOCK5 sr localsid address 2::2 behavior end.dx6 host-eth2 2005::4
+$VPPCTL -s $CLISOCK5 sr localsid address 2::2 behavior end.dx6 host-eth2 2005::5
 sleep 1
-$VPPCTL -s $CLISOCK5 sr localsid address 3::3 behavior end.dx6 host-eth2 2005::4
+$VPPCTL -s $CLISOCK5 sr localsid address 3::3 behavior end.dx6 host-eth2 2005::5
 
-$VPPCTL -s $CLISOCK5 trace add memif-input 50
+$VPPCTL -s $CLISOCK5 trace add af-packet-input 50
 
