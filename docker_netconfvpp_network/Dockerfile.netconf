@@ -52,11 +52,11 @@ WORKDIR /netconf/vpp
 RUN git checkout stable/2101
 RUN yes | make install-deps
 
-RUN make build
+RUN make build-release
 
 WORKDIR /root/go/src/git.fd.io/govpp.git/
 
-RUN /root/go/bin/binapi-generator --input-dir=/netconf/vpp/build-root/install-vpp_debug-native/vpp/share/vpp/api/core --output-dir=binapi
+RUN /root/go/bin/binapi-generator --input-dir=/netconf/vpp/build-root/install-vpp-native/vpp/share/vpp/api/core --output-dir=binapi
 
 WORKDIR /netconf/vpp-controller/libvpp
 
@@ -71,7 +71,7 @@ WORKDIR /netconf/hicn
 
 WORKDIR /netconf/hicn-build
 
-RUN cmake ../hicn/hicn-plugin -DVPP_HOME=/netconf/vpp/build-root/install-vpp_debug-native/vpp -DCMAKE_INSTALL_PREFIX=/netconf/vpp/build-root/install-vpp_debug-native/vpp
+RUN cmake ../hicn/hicn-plugin -DVPP_HOME=/netconf/vpp/build-root/install-vpp-native/vpp -DCMAKE_INSTALL_PREFIX=/netconf/vpp/build-root/install-vpp-native/vpp
 
 RUN make install
 
@@ -102,7 +102,7 @@ RUN make -j 4 install
 
 WORKDIR /netconf/buildroot-hicn
 RUN cmake -DSRPD_PLUGINS_PATH=/usr/local/lib/sysrepo-plugind/plugins \
-	  -DVPP_HOME=/netconf/vpp/build-root/install-vpp_debug-native/vpp \
+	  -DVPP_HOME=/netconf/vpp/build-root/install-vpp-native/vpp \
           ../hicn/ctrl/sysrepo-plugins
 RUN make -j 4 install
 
@@ -123,7 +123,7 @@ RUN useradd -m -s /bin/bash netconf && echo "netconf:netconf" | chpasswd
 
 WORKDIR /
 
-ENV PATH="/netconf/vpp/build-root/install-vpp_debug-native/vpp/bin:${PATH}"
+ENV PATH="/netconf/vpp/build-root/install-vpp-native/vpp/bin:${PATH}"
 
 ADD *.py /
 ADD controller_config.txt /

@@ -5,7 +5,7 @@ import time
 # Dictionary of prefixes and corresponding addresses
 address_store = {
     # <prefix>: <address>
-    'b001::/64': '2::2'
+    'b001::': '2::2'
 }
 
 # Import configs from file
@@ -89,7 +89,7 @@ with manager.connect(host='localhost', port=830, username='netconf',password='ne
             print("test1")
             add_route = '''
             <add-route xmlns="urn:sysrepo:ondemand">
-                <prefix>''' + prefix + '''</prefix>
+                <prefix>''' + prefix + '''/64</prefix>
                 <destination>''' + address_store[prefix] + '''</destination>
             </add-route>
             '''
