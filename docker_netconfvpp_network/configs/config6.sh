@@ -17,7 +17,7 @@ $VPPCTL -s $CLISOCK6 set int state host-eth0 up
 
 $VPPCTL -s $CLISOCK6 ip route add 2002::/64 table 10 via 2005::4 host-eth0
 
-$VPPCTL -s $CLISOCK6 ip route add 2004::/64 table 10 via 2005::4 host-eth0
+#$VPPCTL -s $CLISOCK6 ip route add 2004::/64 table 10 via 2005::4 host-eth0
 
 $VPPCTL -s $CLISOCK6 hicn pgen server name b001::1/64 intfc host-eth0
 

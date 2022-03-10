@@ -35,8 +35,8 @@ $VPPCTL -s $CLISOCK2 ip route add 3::3/128 via 2003::5 host-eth2
 
 $VPPCTL -s $CLISOCK2 trace add af-packet-input 50
 
-$VPPCTL -s $CLISOCK2 set sr encaps source addr 1::1
-sleep 1
-$VPPCTL -s $CLISOCK2 sr policy add bsid 1::1:999 next 3::3 encap
-sleep 1
-$VPPCTL -s $CLISOCK2 sr steer l3 b001::/64 via bsid 1::1:999
+#$VPPCTL -s $CLISOCK2 set sr encaps source addr 1::1
+#sleep 1
+#$VPPCTL -s $CLISOCK2 sr policy add bsid 1::1:999 next 3::3 encap
+#sleep 1
+#$VPPCTL -s $CLISOCK2 sr steer l3 b001::/64 via bsid 1::1:999

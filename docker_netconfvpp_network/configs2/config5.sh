@@ -34,9 +34,9 @@ sleep 1
 $VPPCTL -s $CLISOCK5 set int state memif5/0 up
 
 sleep 1
-$VPPCTL -s $CLISOCK5 sr localsid address 2::2 behavior end.dx6 memif5/0 2005::4
+$VPPCTL -s $CLISOCK5 sr localsid address 2::2 behavior end.dx6 memif5/0 2005::5
 sleep 1
-$VPPCTL -s $CLISOCK5 sr localsid address 3::3 behavior end.dx6 memif5/0 2005::4
+$VPPCTL -s $CLISOCK5 sr localsid address 3::3 behavior end.dx6 memif5/0 2005::5
 
 $VPPCTL -s $CLISOCK5 trace add memif-input 50
 
