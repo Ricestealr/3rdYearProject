@@ -126,6 +126,7 @@ WORKDIR /
 ENV PATH="/netconf/vpp/build-root/install-vpp_debug-native/vpp/bin:${PATH}"
 
 ADD *.py /
+ADD controller_config.txt /
 ADD configs /configs
 RUN chmod +x /configs/*
 #ENTRYPOINT ["/start_netconf.sh"]
