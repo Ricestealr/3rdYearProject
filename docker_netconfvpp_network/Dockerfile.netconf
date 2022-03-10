@@ -28,7 +28,7 @@ RUN git clone -b v2.0.24 https://github.com/CESNET/libnetconf2.git
 RUN git clone -b v2.0.35 https://github.com/CESNET/netopeer2.git
 RUN git clone -b libssh-0.9.6 http://git.libssh.org/projects/libssh.git
 
-RUN git clone -b v21.01 https://github.com/srene/vpp
+RUN git clone https://github.com/srene/vpp
 RUN git clone https://github.com/srene/hicn
 
 RUN git clone https://github.com/srene/vpp-controller.git
@@ -49,6 +49,7 @@ RUN go install git.fd.io/govpp.git/cmd/binapi-generator@master
 
 WORKDIR /netconf/vpp
 
+RUN git checkout stable/2101
 RUN yes | make install-deps
 
 RUN make build
