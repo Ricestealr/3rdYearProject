@@ -8,6 +8,21 @@ address_store = {
     '2000::1': '2000:2000:1'
 }
 
+# Import configs from file
+with open("controller_config.txt") as f:
+    configs = f.readlines()
+
+for i in range(0,len(configs)):
+    prefix, destination = configs[i].split(" ")
+    try:
+        destination = destination.split("\n")[0]
+    except:
+        continue
+    # print(prefix,destination)
+    address_store[prefix] = destination
+
+# print(address_store)
+
 # Total Number of Notifications Received and Parsed in Session
 notifs_processed = 0
 
