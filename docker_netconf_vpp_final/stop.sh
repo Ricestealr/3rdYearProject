@@ -7,3 +7,4 @@ docker network rm vppnet3
 docker network rm vppnet4
 docker network rm vppnet5
 docker network rm vppnet6
+docker network rm vppnet7

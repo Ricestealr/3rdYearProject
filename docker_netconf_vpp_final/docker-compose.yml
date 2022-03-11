@@ -19,6 +19,9 @@ networks:
   vppnet6:
     name: vppnet6
     external: true    
+  vppnet7:
+    name: vppnet7
+    external: true
 
 volumes:
   shared:
@@ -54,6 +57,7 @@ services:
       - vppnet1
       - vppnet2
       - vppnet3
+      - vppnet7
     entrypoint: "sh /configs/start2.sh"
     volumes:
       - shared:/shared
@@ -125,3 +129,20 @@ services:
     entrypoint: "sh /configs/start6.sh"
     volumes:
       - shared:/shared
+
+  controller-service:
+    image: netconf_vpp
+    hostname: controller
+    container_name: controller
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    privileged: true
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.eth0.proxy_ndp=1
+    networks:
+      - vppnet7
+    entrypoint: "sh /configs/start7.sh"
+    volumes:
+      - shared:/shared
+

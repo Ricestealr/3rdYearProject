@@ -26,7 +26,7 @@ for i in range(0,len(configs)):
 # Total Number of Notifications Received and Parsed in Session
 notifs_processed = 0
 
-with manager.connect(host='localhost', port=830, username='netconf',password='netconf', hostkey_verify=False) as m:
+with manager.connect(host='192.168.10.3', port=830, username='netconf',password='netconf', hostkey_verify=False) as m:
     ### TEST LINE
     print(m.connected)
     

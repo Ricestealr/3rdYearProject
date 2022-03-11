@@ -6,4 +6,5 @@ docker network create --ipv6 --subnet="2002::/64" --gateway="2002::1" vppnet3
 docker network create --ipv6 --subnet="2003::/64" --gateway="2003::1" vppnet4
 docker network create --ipv6 --subnet="2004::/64" --gateway="2004::1" vppnet5
 docker network create --ipv6 --subnet="2005::/64" --gateway="2005::1" vppnet6
+docker network create --subnet="192.168.10.0/24" --gateway="192.168.10.1" vppnet7
 docker-compose up

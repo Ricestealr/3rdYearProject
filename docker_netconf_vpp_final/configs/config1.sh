@@ -35,7 +35,7 @@ $VPPCTL -s $CLISOCK1 hicn pgen client src 5001::2 name b001::1/64 intfc host-eth
 sleep 1
 $VPPCTL -s $CLISOCK1 hicn enable b001::/64
 sleep 1
-$VPPCTL -s $CLISOCK1 exec /configs/pg4.conf
+$VPPCTL -s $CLISOCK1 exec /configs/pg.conf
 sleep 1
 
 $VPPCTL -s $CLISOCK1 trace add af-packet-input 50
